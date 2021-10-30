@@ -3,8 +3,21 @@
 
 import * as React from 'react'
 
+function useLocalStorageState (key, defaultValue = '') {
+  const [state, setState] = React.useState(() => {
+    const item = window.localStorage.getItem(key)
+    return item ? item : defaultValue
+  })
+
+  React.useEffect(() => {
+    window.localStorage.setItem(key, state)
+  }, [key, state])
+
+  return [state, setState]
+}
+
 function Greeting({initialName = ''}) {
-  const [name, setName] = React.useState(() => window.localStorage.getItem('name') || initialName)
+  const [name, setName] = useLocalStorageState('name', initialName)
 
   // Only run the effect if `name` changes.
   // https://reactjs.org/docs/hooks-effect.html#tip-optimizing-performance-by-skipping-effects
