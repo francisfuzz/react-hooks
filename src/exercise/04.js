@@ -5,7 +5,10 @@ import * as React from 'react'
 
 function Board() {
   // 🐨 squares is the state for this component. Add useState for squares
-  const [squares, setSquares] = React.useState(Array(9).fill(null))
+  // bigzoo: Start by closing the tab and come back, and without pause or resume, that's extra!
+  // Hook into the initial render and see if there's a hook for where the page is loading.
+  // Check if there's existing value for squares. If so, set the squares to that value.
+  const [squares, setSquares] = React.useState(JSON.parse(window.localStorage.getItem('squares')) || Array(9).fill(null))
 
   // 🐨 We'll need the following bits of derived state:
   // - nextValue ('X' or 'O')
@@ -40,10 +43,12 @@ function Board() {
     //
     // 🐨 set the squares to your copy
     setSquares(squaresCopy)
+    window.localStorage.setItem('squares', JSON.stringify(squaresCopy))
   }
 
   function restart() {
     setSquares(Array(9).fill(null))
+    window.localStorage.setItem('squares', JSON.stringify(Array(9).fill(null)))
   }
 
   function renderSquare(i) {
