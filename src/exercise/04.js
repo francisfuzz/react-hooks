@@ -115,7 +115,7 @@ function calculateNextValue(squares) {
   return squares.filter(Boolean).length % 2 === 0 ? 'X' : 'O'
 }
 
-// eslint-disable-next-line no-unused-vars'
+// eslint-disable-next-line no-unused-vars
 /**
  * Utility function for calculating the winner of a 3x3 tic-tac-toe board
  * @param {array} squares
