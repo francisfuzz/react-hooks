@@ -64,7 +64,14 @@ function Game() {
   }
 
   const moves = history.map(function (move, index) {
-    return <li key={index}>{move}</li>
+    return (
+      <li key={index}>{move} <button onClick={() => {
+        // Reset the board back at this move.
+        setSquares(move)
+        // Clean up history.
+        setHistory(history.slice(0, index + 1))
+      }}>🔙 </button></li>
+    )
   })
 
   return (
