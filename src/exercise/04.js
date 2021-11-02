@@ -8,7 +8,13 @@ function Board() {
   // bigzoo: Start by closing the tab and come back, and without pause or resume, that's extra!
   // Hook into the initial render and see if there's a hook for where the page is loading.
   // Check if there's existing value for squares. If so, set the squares to that value.
-  const [squares, setSquares] = React.useState(JSON.parse(window.localStorage.getItem('squares')) || Array(9).fill(null))
+  const [squares, setSquares] = React.useState(() => {
+    return JSON.parse(window.localStorage.getItem('squares')) || Array(9).fill(null)
+  })
+
+  React.useEffect(() => {
+    window.localStorage.setItem('squares', JSON.stringify(squares))
+  }, [squares])
 
   // 🐨 We'll need the following bits of derived state:
   // - nextValue ('X' or 'O')
@@ -43,7 +49,6 @@ function Board() {
     //
     // 🐨 set the squares to your copy
     setSquares(squaresCopy)
-    window.localStorage.setItem('squares', JSON.stringify(squaresCopy))
   }
 
   function restart() {
