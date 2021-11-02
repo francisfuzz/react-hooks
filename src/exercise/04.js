@@ -5,11 +5,16 @@ import * as React from 'react'
 import {useLocalStorageState} from '../utils'
 
 function Board() {
+  const EMPTY_SQUARES = Array(9).fill(null)
+
   // 🐨 squares is the state for this component. Add useState for squares
   // bigzoo: Start by closing the tab and come back, and without pause or resume, that's extra!
   // Hook into the initial render and see if there's a hook for where the page is loading.
   // Check if there's existing value for squares. If so, set the squares to that value.
-  const [squares, setSquares] = useLocalStorageState('squares', Array(9).fill(null))
+  const [squares, setSquares] = useLocalStorageState(
+    'squares',
+    EMPTY_SQUARES
+  )
 
   // 🐨 We'll need the following bits of derived state:
   // - nextValue ('X' or 'O')
@@ -47,7 +52,7 @@ function Board() {
   }
 
   function restart() {
-    setSquares(Array(9).fill(null))
+    setSquares(EMPTY_SQUARES)
   }
 
   function renderSquare(i) {
