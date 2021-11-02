@@ -12,6 +12,12 @@ function Board() {
     EMPTY_SQUARES
   )
 
+  // State hook for tracking the history of gameplay.
+  const [history, setHistory] = useLocalStorageState(
+    'history',
+    []
+  )
+
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
@@ -22,13 +28,19 @@ function Board() {
     }
 
     const nextValue = calculateNextValue(squares)
+
+    // Update squares with the new move.
     const squaresCopy = [...squares]
     squaresCopy[square] = nextValue
     setSquares(squaresCopy)
+
+    // Update history now that the new move has been made.
+    setHistory([...history, nextValue])
   }
 
   function restart() {
     setSquares(EMPTY_SQUARES)
+    setHistory([])
   }
 
   function renderSquare(i) {
@@ -38,6 +50,10 @@ function Board() {
       </button>
     )
   }
+
+  const moves = history.map(function (move) {
+    return <li>{move}</li>
+  })
 
   return (
     <div>
@@ -60,6 +76,7 @@ function Board() {
       <button className="restart" onClick={restart}>
         restart
       </button>
+      <ol>{moves}</ol>
     </div>
   )
 }
