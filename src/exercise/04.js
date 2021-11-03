@@ -54,13 +54,15 @@ function Board({onClick, squares}) {
  * @returns React.Component
  */
 function Game() {
+  // Constant representing an empty, unplayed board.
+  const EMPTY_SQUARES = Array(9).fill(null)
+
   // State hook that represents the current state of the game
   const [squares, setSquares] = useLocalStorageState('squares', EMPTY_SQUARES)
   // State hook that represents the history of the game
   const [history, setHistory] = useLocalStorageState('history', [])
 
-  // Initializers for the starting state of the game
-  const EMPTY_SQUARES = Array(9).fill(null)
+  // Initializers for the game's state.
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
@@ -104,12 +106,12 @@ function Game() {
    */
   const moves = history.map(function (move, index) {
     return (
-      <li key={index}>{move} <button onClick={() => {
+      <li key={index}><button onClick={() => {
         // Reset the board back at this move.
         setSquares(move)
         // Clean up history.
         setHistory(history.slice(0, index + 1))
-      }}>🔙 </button></li>
+      }}>🔙 </button>{move}</li>
     )
   })
 
