@@ -1,10 +1,24 @@
 // useState: tic tac toe
 // http://localhost:3000/isolated/exercise/04.js
 
+// Module dependencies
 import * as React from 'react'
 import {useLocalStorageState} from '../utils'
 
+/**
+ * Utility function for rendering a tic-tac-toe board
+ *
+ * @param {function} onClick handler for the squares in the board
+ * @param {array} squares expects an array of 9 elements (3x3 board)
+ * @returns React.Component
+ */
 function Board({onClick, squares}) {
+
+/**
+ * Utility function for rendering a square in the board
+ * @param {number} i positive integer [1, 9]
+ * @returns React.Component
+ */
   function renderSquare(i) {
     return (
       <button className="square" onClick={() => onClick(i)}>
