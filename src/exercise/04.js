@@ -48,16 +48,31 @@ function Board({onClick, squares}) {
   )
 }
 
+/**
+ * Tic Tac Toe game
+ *
+ * @returns React.Component
+ */
 function Game() {
-  const EMPTY_SQUARES = Array(9).fill(null)
+  // State hook that represents the current state of the game
   const [squares, setSquares] = useLocalStorageState('squares', EMPTY_SQUARES)
+  // State hook that represents the history of the game
   const [history, setHistory] = useLocalStorageState('history', [])
 
+  // Initializers for the starting state of the game
+  const EMPTY_SQUARES = Array(9).fill(null)
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
 
+  /**
+   * Event handler for when a square is selected
+   *
+   * @param {number} square positive integer [0, 8]
+   * @returns undefined
+   */
   function selectSquare(square) {
+    // If the winner is already determined or square was previously selected, do nothing
     if (winner || squares[square]) {
       return
     }
@@ -72,11 +87,21 @@ function Game() {
     setHistory([...history, squaresCopy])
   }
 
+  /**
+   * Event handler for when the game is restarted
+   *
+   * @returns undefined
+   */
   function restart() {
     setSquares(EMPTY_SQUARES)
     setHistory([])
   }
 
+  /**
+   * A collection of list items representing the history of the game.
+   *
+   * @returns React.Component
+   */
   const moves = history.map(function (move, index) {
     return (
       <li key={index}>{move} <button onClick={() => {
