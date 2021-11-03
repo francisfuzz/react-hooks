@@ -14,11 +14,11 @@ import {useLocalStorageState} from '../utils'
  */
 function Board({onClick, squares}) {
 
-/**
- * Utility function for rendering a square in the board
- * @param {number} i positive integer [1, 9]
- * @returns React.Component
- */
+  /**
+   * Utility function for rendering a square in the board
+   * @param {number} i positive integer [1, 9]
+   * @returns React.Component
+   */
   function renderSquare(i) {
     return (
       <button className="square" onClick={() => onClick(i)}>
