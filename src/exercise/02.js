@@ -3,14 +3,30 @@
 
 import * as React from 'react'
 
-function Greeting({initialName = ''}) {
-  // 🐨 initialize the state to the value from localStorage
-  // 💰 window.localStorage.getItem('name') || initialName
-  const [name, setName] = React.useState(initialName)
+function useLocalStorageState (key, defaultValue = '', {
+  serialize = JSON.stringify,
+  deserialize = JSON.parse
+} = {}) {
+  const [state, setState] = React.useState(() => {
+    const item = window.localStorage.getItem(key)
+    return item ? deserialize(item) : defaultValue
+  })
 
-  // 🐨 Here's where you'll use `React.useEffect`.
-  // The callback should set the `name` in localStorage.
-  // 💰 window.localStorage.setItem('name', name)
+  React.useEffect(() => {
+    window.localStorage.setItem(key, serialize(state))
+  }, [key, serialize, state])
+
+  return [state, setState]
+}
+
+function Greeting({initialName = ''}) {
+  const [name, setName] = useLocalStorageState('name', initialName)
+
+  // Only run the effect if `name` changes.
+  // https://reactjs.org/docs/hooks-effect.html#tip-optimizing-performance-by-skipping-effects
+  React.useEffect(() => {
+    window.localStorage.setItem('name', name)
+  }, [name])
 
   function handleChange(event) {
     setName(event.target.value)
