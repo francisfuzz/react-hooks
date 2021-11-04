@@ -7,6 +7,8 @@ import {fetchPokemon, PokemonInfoFallback, PokemonDataView, PokemonForm} from '.
 function PokemonInfo({pokemonName}) {
   // Set up a State Hook to track the pokemon to be shown.
   const [pokemon, setPokemon] = React.useState(null)
+  // Set up a State Hook to track the error to be shown.
+  const [error, setError] = React.useState(null)
 
   // Set up an Effect Hook to fetch the pokemon data
   // only when `pokemonName` changes.
@@ -18,25 +20,35 @@ function PokemonInfo({pokemonName}) {
 
     // Reset the pokemon to null so we can appropriately render the fallback.
     setPokemon(null)
+    // Reset the error if it was set previously.
+    setError(null)
 
     // Fetch the pokemon data, and catch+log any errors.
-    fetchPokemon(pokemonName).then(pokemonData => {
-      setPokemon(pokemonData)
-    }).catch((e) => console.error(e))
+    fetchPokemon(pokemonName)
+      .then(
+        pokemonData => setPokemon(pokemonData),
+        error => setError(error)
+      )
   }, [pokemonName])
 
-  // Prompt the user to enter a pokemon name if we don't have one.
+  if (error) {
+    return (
+      <div role="alert">
+        There was an error: <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+      </div>
+    )
+  }
+
   if (!pokemonName) {
+    // Prompt the user to enter a pokemon name if we don't have one.
     return <span>Submit a pokemon</span>
-  }
-
-  // If we don't have a pokemon, show the fallback.
-  if (!pokemon) {
+  } else if (!pokemon) {
+    // If we don't have a pokemon, show the fallback.
     return <PokemonInfoFallback name={pokemonName} />
+  } else {
+    // Otherwise, show the pokemon data.
+    return <PokemonDataView pokemon={pokemon} />
   }
-
-  // Otherwise, show the pokemon data.
-  return <PokemonDataView pokemon={pokemon} />
 }
 
 function App() {
