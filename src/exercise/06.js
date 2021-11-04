@@ -23,7 +23,7 @@ function PokemonInfo({pokemonName}) {
     // Reset the error if it was set previously.
     setError(null)
 
-    // Fetch the pokemon data, and catch+log any errors.
+    // Fetch the pokemon data, and set the error if there is one.
     fetchPokemon(pokemonName)
       .then(
         pokemonData => setPokemon(pokemonData),
