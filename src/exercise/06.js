@@ -5,19 +5,23 @@ import * as React from 'react'
 import {fetchPokemon, PokemonInfoFallback, PokemonDataView, PokemonForm} from '../pokemon'
 
 function PokemonInfo({pokemonName}) {
-  // Set up a State Hook to track the pokemon to be shown.
+  // Set up State Hooks.
+  // Tracks status of the application
+  const [status, setStatus] = React.useState('idle')
+  // Tracks the pokemon to be shown
   const [pokemon, setPokemon] = React.useState(null)
-  // Set up a State Hook to track the error to be shown.
+  // Tracks the error(s) to be shown
   const [error, setError] = React.useState(null)
 
-  // Set up an Effect Hook to fetch the pokemon data
-  // only when `pokemonName` changes.
+  // Set up an Effect Hook to fetch the pokemon data only when `pokemonName` changes.
   React.useEffect(() => {
     // If the pokemonName is falsy, we don't need to fetch anything.
     if (!pokemonName) {
       return
     }
 
+    // Indicate we're starting a new request.
+    setStatus('pending')
     // Reset the pokemon to null so we can appropriately render the fallback.
     setPokemon(null)
     // Reset the error if it was set previously.
@@ -25,29 +29,33 @@ function PokemonInfo({pokemonName}) {
 
     // Fetch the pokemon data, and set the error if there is one.
     fetchPokemon(pokemonName)
-      .then(
-        pokemonData => setPokemon(pokemonData),
-        error => setError(error)
-      )
+      .then(function (pokemonData) {
+        setPokemon(pokemonData)
+        setStatus('resolved')
+      }, function (error) {
+        setError(error)
+        setStatus('rejected')
+      })
   }, [pokemonName])
 
-  if (error) {
+  if (status === 'idle') {
+    return <span>Submit a pokemon</span>
+  }
+
+  if (status === 'pending') {
+    return <PokemonInfoFallback name={pokemonName} />
+  }
+
+  if (status === 'resolved') {
+    return <PokemonDataView pokemon={pokemon} />
+  }
+
+  if (status === 'rejected') {
     return (
       <div role="alert">
         There was an error: <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
       </div>
     )
-  }
-
-  if (!pokemonName) {
-    // Prompt the user to enter a pokemon name if we don't have one.
-    return <span>Submit a pokemon</span>
-  } else if (!pokemon) {
-    // If we don't have a pokemon, show the fallback.
-    return <PokemonInfoFallback name={pokemonName} />
-  } else {
-    // Otherwise, show the pokemon data.
-    return <PokemonDataView pokemon={pokemon} />
   }
 }
 
