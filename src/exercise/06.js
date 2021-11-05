@@ -29,10 +29,10 @@ function PokemonInfo({pokemonName}) {
 
     // Fetch the pokemon data, and set the error if there is one.
     fetchPokemon(pokemonName)
-      .then(function (pokemonData) {
+      .then(pokemonData => {
         setPokemon(pokemonData)
         setStatus('resolved')
-      }, function (error) {
+      }, (error) => {
         setError(error)
         setStatus('rejected')
       })
