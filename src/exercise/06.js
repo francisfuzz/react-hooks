@@ -14,6 +14,8 @@ function PokemonInfo({pokemonName}) {
     error: null,
   })
 
+  const {status, pokemon, error} = state
+
   // Set up an Effect Hook to fetch the pokemon data only when `pokemonName` changes.
   React.useEffect(() => {
     // If the pokemonName is falsy, we don't need to fetch anything.
@@ -43,22 +45,22 @@ function PokemonInfo({pokemonName}) {
       })
   }, [pokemonName])
 
-  if (state.status === 'idle') {
+  if (status === 'idle') {
     return <span>Submit a pokemon</span>
   }
 
-  if (state.status === 'pending') {
+  if (status === 'pending') {
     return <PokemonInfoFallback name={pokemonName} />
   }
 
-  if (state.status === 'resolved') {
-    return <PokemonDataView pokemon={state.pokemon} />
+  if (status === 'resolved') {
+    return <PokemonDataView pokemon={pokemon} />
   }
 
-  if (state.status === 'rejected') {
+  if (status === 'rejected') {
     return (
       <div role="alert">
-        There was an error: <pre style={{whiteSpace: 'normal'}}>{state.error.message}</pre>
+        There was an error: <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
       </div>
     )
   }
