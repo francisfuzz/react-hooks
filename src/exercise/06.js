@@ -4,15 +4,14 @@
 import * as React from 'react'
 import {fetchPokemon, PokemonInfoFallback, PokemonDataView, PokemonForm} from '../pokemon'
 
-// Source: https://reactjs.org/docs/error-boundaries.html
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {hasError: false, error: null}
+    this.state = {error: null}
   }
 
   static getDerivedStateFromError(error) {
-    return {hasError: true, error}
+    return {error}
   }
 
   componentDidCatch(error, info) {
@@ -20,7 +19,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    if (this.state.hasError) {
+    if (this.state.error) {
       return (
         <div role="alert">
           There was an error: <pre style={{whiteSpace: 'normal'}}>{this.state.error.message}</pre>
