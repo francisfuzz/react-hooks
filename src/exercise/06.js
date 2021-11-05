@@ -88,7 +88,6 @@ function App() {
       <div className="pokemon-info">
         <ErrorBoundary
           FallbackComponent={ErrorFallBack}
-          key={pokemonName}
           onReset={() => setPokemonName('')}
         >
           <PokemonInfo pokemonName={pokemonName} />
