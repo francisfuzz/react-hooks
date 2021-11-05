@@ -11,6 +11,13 @@ import {
 } from '../pokemon'
 
 class ErrorBoundary extends React.Component {
+  // Observe that neither `let` nor `const` are prepended here.
+  // Q: Does the `state` variable have a special meaning in the context of being set in a class?
+  // Answer: this `state` isn't special in the context of a class. This is known as a Public instance field.
+  // A public instance field exists on every created instance of a class.
+  // By declaring a public field, you can ensure the field is always present, and the class definition is more self-documenting.
+  // Internally, public instance fields are added with `Object.defineProperty()` either at construction time in the base class, or in derived classes.
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields#public_instance_fields
   state = {error: null}
   static getDerivedStateFromError(error) {
     return {error}
