@@ -5,7 +5,7 @@ import * as React from 'react'
 import {fetchPokemon, PokemonInfoFallback, PokemonDataView, PokemonForm} from '../pokemon'
 
 function PokemonInfo({pokemonName}) {
-  const [pokemonInfoState, setPokemonInfoState] = React.useState({
+  const [state, setState] = React.useState({
     // Tracks status of the application.
     status: 'idle',
     // Tracks the pokemon to be shown.
@@ -22,7 +22,7 @@ function PokemonInfo({pokemonName}) {
     }
 
     // Indicate this is a pending request and nullify any previously set `pokemon` or `error`.
-    setPokemonInfoState({
+    setState({
       status: 'pending',
       pokemon: null,
       error: null,
@@ -31,34 +31,34 @@ function PokemonInfo({pokemonName}) {
     // Fetch the pokemon data, and set the error if there is one.
     fetchPokemon(pokemonName)
       .then(pokemonData => {
-        setPokemonInfoState({
+        setState({
           status: 'resolved',
           pokemon: pokemonData,
         })
       }, (error) => {
-        setPokemonInfoState({
+        setState({
           status: 'rejected',
           error: error,
         })
       })
   }, [pokemonName])
 
-  if (pokemonInfoState.status === 'idle') {
+  if (state.status === 'idle') {
     return <span>Submit a pokemon</span>
   }
 
-  if (pokemonInfoState.status === 'pending') {
+  if (state.status === 'pending') {
     return <PokemonInfoFallback name={pokemonName} />
   }
 
-  if (pokemonInfoState.status === 'resolved') {
-    return <PokemonDataView pokemon={pokemonInfoState.pokemon} />
+  if (state.status === 'resolved') {
+    return <PokemonDataView pokemon={state.pokemon} />
   }
 
-  if (pokemonInfoState.status === 'rejected') {
+  if (state.status === 'rejected') {
     return (
       <div role="alert">
-        There was an error: <pre style={{whiteSpace: 'normal'}}>{pokemonInfoState.error.message}</pre>
+        There was an error: <pre style={{whiteSpace: 'normal'}}>{state.error.message}</pre>
       </div>
     )
   }
